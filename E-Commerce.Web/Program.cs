@@ -2,6 +2,7 @@ using DomainLayer.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Presis;
 using Presis.Data;
+using Presis.Repositories;
 namespace E_Commerce.Web
 {
     public class Program
@@ -21,6 +22,7 @@ namespace E_Commerce.Web
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
             builder.Services.AddScoped<IDataSeeding, DataSeeding>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWok>();
 
             var app = builder.Build();
 
