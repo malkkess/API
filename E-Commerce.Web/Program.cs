@@ -4,6 +4,8 @@ using Presis;
 using Service.Profiles;
 using Presis.Data;
 using Presis.Repositories;
+using ServiceAbsrt;
+using Service;
 namespace E_Commerce.Web
 {
     public class Program
@@ -25,6 +27,7 @@ namespace E_Commerce.Web
             builder.Services.AddScoped<IDataSeeding, DataSeeding>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWok>();
             builder.Services.AddAutoMapper(typeof(Service.AssemblyReference).Assembly);
+            builder.Services.AddScoped<IServiceManger, ServiceManger>();
 
             var app = builder.Build();
 
