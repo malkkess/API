@@ -19,7 +19,7 @@ namespace Presentation.Controllers
             var Products = await servicemanger.ProductService.GetAllProductsAsync();
             return Ok(Products);
         }
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<ProductDto>> GetProduct(int id)
         {
             var Product = await servicemanger.ProductService.GetById(id);
