@@ -1,6 +1,7 @@
 using DomainLayer.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Presis;
+using Service.Profiles;
 using Presis.Data;
 using Presis.Repositories;
 namespace E_Commerce.Web
@@ -23,6 +24,7 @@ namespace E_Commerce.Web
             });
             builder.Services.AddScoped<IDataSeeding, DataSeeding>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWok>();
+            builder.Services.AddAutoMapper(typeof(Service.AssemblyReference).Assembly);
 
             var app = builder.Build();
 
