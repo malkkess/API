@@ -1,7 +1,11 @@
 using DomainLayer.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Presis;
+using Service.Profiles;
 using Presis.Data;
+using Presis.Repositories;
+using ServiceAbsrt;
+using Service;
 namespace E_Commerce.Web
 {
     public class Program
@@ -21,6 +25,9 @@ namespace E_Commerce.Web
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
             builder.Services.AddScoped<IDataSeeding, DataSeeding>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWok>();
+            builder.Services.AddAutoMapper(typeof(Service.AssemblyReference).Assembly);
+            builder.Services.AddScoped<IServiceManger, ServiceManger>();
 
             var app = builder.Build();
 
@@ -36,6 +43,7 @@ namespace E_Commerce.Web
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 
