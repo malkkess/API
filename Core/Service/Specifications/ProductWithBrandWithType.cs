@@ -10,7 +10,8 @@ namespace Service.Specifications
 {
     class ProductWithBrandWithType : BaseSpecifications<Product, int>
     {
-        public ProductWithBrandWithType() : base(null)
+        public ProductWithBrandWithType(int? BrandId, int? TypeId) : base(p=>(!BrandId.HasValue || p.BrandId==BrandId)
+        &&(!TypeId.HasValue || p.TypeId==TypeId))
         {
             AddInclude(p=>p.productBrand);
             AddInclude(p=>p.productType);
