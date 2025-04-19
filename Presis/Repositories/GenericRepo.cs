@@ -15,14 +15,23 @@ namespace Presis.Repositories
         public async Task AddAsync(TEntity entity)=> await dbContext.Set<TEntity>().AddAsync(entity);
 
         public async Task<IEnumerable<TEntity>> GetAllAsync() => await dbContext.Set<TEntity>().ToListAsync();
-        
 
         public async Task<TEntity?> GetIdAsync(TKey id)=> await dbContext.Set<TEntity>().FindAsync(id);
-       
+
 
         public void Remove(TEntity entity)=> dbContext.Set<TEntity>().Remove(entity);
 
         public void Update(TEntity entity)=> dbContext.Set<TEntity>().Update(entity);
-        
+        public async Task<IEnumerable<TEntity>> GetAllAsync(ISpecification<TEntity, TKey> specification)
+        {
+           return await SpecificationEval.CreateQuery(dbContext.Set<TEntity>() , specification).ToListAsync();
+        }
+        public async Task<TEntity?> GetIdAsync(ISpecification<TEntity, TKey> specification)
+        {
+            return await SpecificationEval.CreateQuery(dbContext.Set<TEntity>(), specification).FirstOrDefaultAsync();
+        }
+
+        public async Task<int> CountAsync(ISpecification<TEntity, TKey> specification)
+        => await SpecificationEval.CreateQuery(dbContext.Set<TEntity>() , specification).CountAsync();
     }
 }
