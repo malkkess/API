@@ -18,6 +18,14 @@ namespace Presis
             {
                 Query = Query.Where(spec.Criteria);
             }
+            if(spec.OrderBy is not null)
+            {
+                Query = Query.OrderBy(spec.OrderBy);
+            }
+            if (spec.OrderByDescending is not null)
+            {
+                Query = Query.OrderBy(spec.OrderByDescending);
+            }
             if (spec.IncludeExpression is not null && spec.IncludeExpression.Count >0)
             {
                 //foreach(var exp in spec.IncludeExpression)
@@ -26,6 +34,10 @@ namespace Presis
                 //}
                 Query = spec.IncludeExpression.Aggregate(Query, (CurrentQuery, IncludeExp) => CurrentQuery.Include(IncludeExp));
 
+            }
+            if(spec.IsPagination)
+            {
+                Query = Query.Skip(spec.Skip).Take(spec.Take);
             }
             return Query;
         }
