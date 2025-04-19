@@ -9,7 +9,7 @@ using DomainLayer.Models;
 
 namespace Service.Specifications
 {
-    abstract class BaseSpecifications<TEntity, TKey> : ISpecification<TEntity, TKey> where TEntity : BaseEntity<TKey>
+    public abstract class BaseSpecifications<TEntity, TKey> : ISpecification<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
         protected BaseSpecifications(Expression<Func<TEntity, bool>>? expression)
         {

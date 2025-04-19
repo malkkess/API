@@ -31,6 +31,7 @@ namespace Presis.Repositories
             return await SpecificationEval.CreateQuery(dbContext.Set<TEntity>(), specification).FirstOrDefaultAsync();
         }
 
-        
+        public async Task<int> CountAsync(ISpecification<TEntity, TKey> specification)
+        => await SpecificationEval.CreateQuery(dbContext.Set<TEntity>() , specification).CountAsync();
     }
 }
