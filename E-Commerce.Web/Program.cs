@@ -7,6 +7,10 @@ using Presis.Repositories;
 using ServiceAbsrt;
 using Service;
 using E_Commerce.Web.CustomMiddleWares;
+using Microsoft.AspNetCore.Mvc;
+using Shared.ErrorModels;
+using E_Commerce.Web.Factories;
+using E_Commerce.Web.Extentsions;
 namespace E_Commerce.Web
 {
     public class Program
@@ -19,22 +23,14 @@ namespace E_Commerce.Web
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-            builder.Services.AddDbContext<StoreDbContext>(opt =>
-            {
-                opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            });
-            builder.Services.AddScoped<IDataSeeding, DataSeeding>();
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWok>();
-            builder.Services.AddAutoMapper(typeof(Service.AssemblyReference).Assembly);
-            builder.Services.AddScoped<IServiceManger, ServiceManger>();
+            builder.Services.AddSwaggerServices();
+            builder.Services.AddInfastructure(builder.Configuration);
+            builder.Services.AddApplicationServices();
+            builder.Services.AddWebApplicationServices();
 
             var app = builder.Build();
 
-            var scoope = app.Services.CreateScope();
-            var objData=scoope.ServiceProvider.GetRequiredService<IDataSeeding>();
-            await objData.DataseedAsync();
+            await app.SeedDataBaseAsync();
             //app.Use(async(RequestContext , NextMiddleWare) =>
             //{
             //    Console.WriteLine("Request Under Processing");
@@ -43,13 +39,14 @@ namespace E_Commerce.Web
             //    Console.WriteLine(RequestContext.Response.Body);
 
             //});
-            app.UseMiddleware<CustomExcepMiddleWare>();
+            app.UseCustomerExceptionMiddleWare();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                //app.UseSwagger();
+                //app.UseSwaggerUI();
+                app.UseSwaggerMiddleWares();
             }
 
             app.UseHttpsRedirection();

@@ -9,7 +9,7 @@ namespace E_Commerce.Web.CustomMiddleWares
         private readonly RequestDelegate _next;
         private readonly ILogger<CustomExcepMiddleWare> logger;
 
-        public CustomExcepMiddleWare(RequestDelegate Next , ILogger<CustomExcepMiddleWare>logger)
+        public CustomExcepMiddleWare(RequestDelegate Next, ILogger<CustomExcepMiddleWare> logger)
         {
             _next = Next;
             this.logger = logger;
