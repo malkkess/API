@@ -19,27 +19,47 @@ namespace E_Commerce.Web.CustomMiddleWares
             try
             {
                 await _next.Invoke(httpContext);
+                await HandleEndPointExecption(httpContext);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                logger.LogError(ex,"Something Went Wrong");
-                httpContext.Response.StatusCode = ex switch
-                {
-                    NotFoundException=>StatusCodes.Status404NotFound,
-                    _ =>StatusCodes.Status500InternalServerError
-                };
-                
+                logger.LogError(ex, "Something Went Wrong");
+                await HandleExceptionAsync(httpContext, ex);
 
+            }
+
+        }
+
+        private static async Task HandleExceptionAsync(HttpContext httpContext, Exception ex)
+        {
+            httpContext.Response.StatusCode = ex switch
+            {
+                NotFoundException => StatusCodes.Status404NotFound,
+                _ => StatusCodes.Status500InternalServerError
+            };
+
+
+            var Response = new ErrorToReturn()
+            {
+                StatusCode = httpContext.Response.StatusCode,
+                ErrorMessage = ex.Message
+            };
+
+            await httpContext.Response.WriteAsJsonAsync(Response);
+        }
+
+        private static async Task HandleEndPointExecption(HttpContext httpContext)
+        {
+            if (httpContext.Response.StatusCode == StatusCodes.Status404NotFound)
+            {
                 var Response = new ErrorToReturn()
                 {
-                    StatusCode = httpContext.Response.StatusCode,
-                    ErrorMessage = ex.Message
+                    StatusCode = StatusCodes.Status404NotFound,
+                    ErrorMessage = $"End Point {httpContext.Request.Path} is Not Found"
                 };
-                
                 await httpContext.Response.WriteAsJsonAsync(Response);
 
             }
-
         }
     }
 }
