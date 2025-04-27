@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using DomainLayer.Exceptions;
 using Shared.ErrorModels;
 
 namespace E_Commerce.Web.CustomMiddleWares
@@ -22,12 +23,16 @@ namespace E_Commerce.Web.CustomMiddleWares
             catch(Exception ex)
             {
                 logger.LogError(ex,"Something Went Wrong");
-                httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                httpContext.Response.ContentType = "application/json";
+                httpContext.Response.StatusCode = ex switch
+                {
+                    NotFoundException=>StatusCodes.Status404NotFound,
+                    _ =>StatusCodes.Status500InternalServerError
+                };
+                
 
                 var Response = new ErrorToReturn()
                 {
-                    StatusCode = StatusCodes.Status500InternalServerError,
+                    StatusCode = httpContext.Response.StatusCode,
                     ErrorMessage = ex.Message
                 };
                 
