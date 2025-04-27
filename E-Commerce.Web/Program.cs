@@ -6,6 +6,7 @@ using Presis.Data;
 using Presis.Repositories;
 using ServiceAbsrt;
 using Service;
+using E_Commerce.Web.CustomMiddleWares;
 namespace E_Commerce.Web
 {
     public class Program
@@ -34,6 +35,15 @@ namespace E_Commerce.Web
             var scoope = app.Services.CreateScope();
             var objData=scoope.ServiceProvider.GetRequiredService<IDataSeeding>();
             await objData.DataseedAsync();
+            //app.Use(async(RequestContext , NextMiddleWare) =>
+            //{
+            //    Console.WriteLine("Request Under Processing");
+            //    await NextMiddleWare.Invoke();
+            //    Console.WriteLine("Waiting Response");
+            //    Console.WriteLine(RequestContext.Response.Body);
+
+            //});
+            app.UseMiddleware<CustomExcepMiddleWare>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
