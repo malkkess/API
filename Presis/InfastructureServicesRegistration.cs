@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DomainLayer.Contracts;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Presis.Data;
+using Presis.Identity;
 using Presis.Repositories;
 using StackExchange.Redis;
 
@@ -27,6 +29,10 @@ namespace Presis
             Services.AddSingleton<IConnectionMultiplexer>((_) =>
             {
                return  ConnectionMultiplexer.Connect(confg.GetConnectionString("RediusConnectionString"));
+            });
+            Services.AddDbContext<StoreIdentityDbContext>(Options =>
+            {
+                Options.UseSqlServer(confg.GetConnectionString("IdentityConnection"));
             });
 
             return Services;
