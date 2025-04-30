@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Presis.Data;
 using Presis.Repositories;
+using StackExchange.Redis;
 
 namespace Presis
 {
@@ -22,6 +23,11 @@ namespace Presis
             });
             Services.AddScoped<IDataSeeding, DataSeeding>();
             Services.AddScoped<IUnitOfWork, UnitOfWok>();
+            Services.AddScoped<IBasketRepo, BasketRepo>();
+            Services.AddSingleton<IConnectionMultiplexer>((_) =>
+            {
+               return  ConnectionMultiplexer.Connect(confg.GetConnectionString("RediusConnectionString"));
+            });
 
             return Services;
         }
