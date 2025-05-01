@@ -11,6 +11,7 @@ namespace E_Commerce.Web.Extentsions
             var objData = scoope.ServiceProvider.GetRequiredService<IDataSeeding>();
 
             await objData.DataseedAsync();
+            await objData.IdentityDataSeedAsync();
         }
         public static IApplicationBuilder UseCustomerExceptionMiddleWare(this IApplicationBuilder app)
         {

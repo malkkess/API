@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 using Shared.ErrorModels;
 using E_Commerce.Web.Factories;
 using E_Commerce.Web.Extentsions;
+using DomainLayer.Models.IdentityModule;
+using Microsoft.AspNetCore.Identity;
+using Presis.Identity;
 namespace E_Commerce.Web
 {
     public class Program
@@ -27,7 +30,7 @@ namespace E_Commerce.Web
             builder.Services.AddInfastructure(builder.Configuration);
             builder.Services.AddApplicationServices();
             builder.Services.AddWebApplicationServices();
-
+           
             var app = builder.Build();
 
             await app.SeedDataBaseAsync();
